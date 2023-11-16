@@ -1,5 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const mongoose = require('mongoose');
 const { default: slugify } = require('slugify');
+// const validator = require('validator');
 
 const tourSchema = new mongoose.Schema(
   {
@@ -10,6 +12,7 @@ const tourSchema = new mongoose.Schema(
       trim: true,
       maxlength: [40, 'Max 40'],
       minlength: [10, 'Min 10'],
+      // validate: [validator.isAlpha, 'Tour name must only contain charaters '],
     },
     slug: String,
     duration: {
