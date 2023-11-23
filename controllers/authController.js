@@ -8,6 +8,7 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const correctPassword = require('../models/userModel');
 const changePasswordAfter = require('../models/userModel');
+const createPasswordResetToken = require('../models/userModel');
 
 const signToken = (id) =>
   jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -106,3 +107,19 @@ exports.restrictTo = (...roles) => {
     next();
   };
 };
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  //1. Get user bassed on POSTed email (ge user từ email)
+
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError('There is no user with email address.', 404));
+  }
+
+  //2. Generate the random reset token (tạo mã token random)
+  const resetToken = user.createPasswordResetToken();
+  await user.save({ validateBeforeSave: false });
+  //3. Send it to user's email (Gửi nó cho email người đùng)
+});
+
+exports.resetPassword = (req, res, next) => {};
