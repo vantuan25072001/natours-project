@@ -26,6 +26,7 @@ app.use((req, res, next) => {
   console.log(req.headers);
   console.log('hiii');
   console.log('email change');
+  console.log('feature');
   next();
 });
 
