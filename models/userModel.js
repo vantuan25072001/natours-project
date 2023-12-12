@@ -40,6 +40,11 @@ const userShema = new mongoose.Schema({
       message: 'Password are not the same!',
     },
   },
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
   passwordChangeAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
@@ -61,6 +66,12 @@ userShema.pre('save', function (next) {
   this.passwordChangeAt = Date.now() - 1000;
   next();
 });
+//Tất cả các trường tìm kiếm find  chỉ được phép trả về active = true
+userShema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
+
 userShema.methods.correctPassword = async function (
   candidatePassword,
   userPassword,
