@@ -53,7 +53,7 @@ app.use(
   }),
 );
 //Saving static files
-app.use(express.static(`${__dirname}/public`))
+app.use(express.static(`${__dirname}/public`));
 
 //Test middleware
 app.use((req, res, next) => {
@@ -72,7 +72,6 @@ app.use('/api/v1/users', userRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
- 
 });
 
 app.use(globalErrorHandler);
