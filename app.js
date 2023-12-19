@@ -58,6 +58,7 @@ app.use(express.static(`${__dirname}/public`));
 //Test middleware
 app.use((req, res, next) => {
   console.log('Hello from the middleware 👋');
+  console.log('master');
   next();
 });
 
