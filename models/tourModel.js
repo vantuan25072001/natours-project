@@ -106,7 +106,12 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
-    guides: Array,
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     //nếu là json hay là object thì mới thêm thuộc tính vào vào , còn không thì không cho xuất hiện

@@ -58,11 +58,13 @@ app.use(express.static(`${__dirname}/public`));
 //Test middleware
 app.use((req, res, next) => {
   console.log('Hello from the middleware 👋');
+
   next();
 });
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  console.log('alo');
   next();
 });
 
