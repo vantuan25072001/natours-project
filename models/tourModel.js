@@ -143,6 +143,7 @@ tourSchema.pre(/^find/, function (next) {
 //Tổng hợp tài liệu cũng vậy , né các tour bí mật ra :v
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  console.log('fdjfkdjkfd');
   next();
 });
 const Tour = mongoose.model('Tour', tourSchema);
