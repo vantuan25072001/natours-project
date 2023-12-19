@@ -129,6 +129,7 @@ tourSchema.pre('save', function (next) {
 tourSchema.pre('save', async function (next) {
   const guidesPromises = this.guides.map(async (id) => await User.findById(id));
   this.guides = await Promise.all(guidesPromises);
+  console.log('alo');
   next();
 });
 
@@ -142,6 +143,7 @@ tourSchema.pre(/^find/, function (next) {
 //Tổng hợp tài liệu cũng vậy , né các tour bí mật ra :v
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  console.log('fdjfkdjkfd');
   next();
 });
 const Tour = mongoose.model('Tour', tourSchema);
