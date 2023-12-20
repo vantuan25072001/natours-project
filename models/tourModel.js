@@ -124,6 +124,12 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  localField: '_id',
+  foreignField: 'tour',
+});
+
 //DOCUMENT MIDDLWARE : runs before .save() and .create()
 //this ở là đối tượng được lưu ỏ tạo.
 tourSchema.pre('save', function (next) {
@@ -138,6 +144,14 @@ tourSchema.pre('save', async function (next) {
 });
 
 // QUERY MIDDLWARE
+//display children
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangeAt',
+  });
+  next();
+});
 //tất cả các truy vấn tìm thì đều né Tour bí mật
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
@@ -147,7 +161,6 @@ tourSchema.pre(/^find/, function (next) {
 //Tổng hợp tài liệu cũng vậy , né các tour bí mật ra :v
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  console.log('fdjfkdjkfd');
   next();
 });
 const Tour = mongoose.model('Tour', tourSchema);
