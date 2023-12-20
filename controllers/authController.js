@@ -94,7 +94,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   //GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
-  console.log(req.user);
   next();
 });
 
@@ -169,7 +168,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   await user.save();
   //3. Update changedPasswordAt property for the user
   //4. Log the user in , send JWT
-
   createSendToken(user, 201, res);
 });
 
