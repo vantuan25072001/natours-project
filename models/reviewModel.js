@@ -74,8 +74,8 @@ reviewSchema.post('save', async function () {
 // //findByIdAndUpdate
 // // //findByIdAndDelete
 reviewSchema.post(/^findOneAnd/, async function (doc) {
-  console.log('📭', this);
-  console.log('😎', this.model);
+  // console.log('📭', this);
+  // console.log('😎', this.model);
   await this.model.calcAverageRatings(doc.tour);
 });
 
