@@ -85,7 +85,6 @@ userShema.methods.changePasswordAfter = function (JWTtimestamp) {
       this.passwordChangeAt.getTime() / 1000,
       10,
     );
-    console.log(changeTimestamp, JWTtimestamp);
     return JWTtimestamp < changeTimestamp;
   }
   return false;
@@ -101,7 +100,6 @@ userShema.methods.createPasswordResetToken = function () {
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };
-
 const User = mongoose.model('User', userShema);
 
 module.exports = User;
