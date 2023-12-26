@@ -8,11 +8,14 @@ const router = express.Router({ mergeParams: true });
 //GET /tour/34324324/reviews
 //POST /reviews
 // / ở đây là ngạch sau reviews vì theo tuyến đường lồng nhau.
+
+//MIddleware bảo vệ trước khi chạy các tuyến đường
+router.use(authController.protect);
+
 router
   .route('/')
   .get(reviewController.getAllReview)
   .post(
-    authController.protect,
     authController.restrictTo('user'),
     reviewController.setTourUserIds,
     reviewController.createReview,
@@ -20,7 +23,14 @@ router
 
 router
   .route('/:id')
-  .patch(reviewController.updateReview)
-  .delete(reviewController.deleteReview);
+  .get(reviewController.getReview)
+  .patch(
+    authController.restrictTo('user', 'admin'),
+    reviewController.updateReview,
+  )
+  .delete(
+    authController.restrictTo('user', 'admin'),
+    reviewController.deleteReview,
+  );
 
 module.exports = router;

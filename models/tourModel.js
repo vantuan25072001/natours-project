@@ -38,6 +38,7 @@ const tourSchema = new mongoose.Schema(
       default: 4.5,
       max: [5, 'Max 5'],
       min: [1, 'Min 1'],
+      set: (val) => Math.round(val * 10) / 10, // 4.666666 , 4.7
     },
     ratingsQuantity: {
       type: Number,
@@ -123,7 +124,10 @@ const tourSchema = new mongoose.Schema(
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
-
+// 1 là tang dan (doan vay)
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: '2dsphere' });
 tourSchema.virtual('reviews', {
   ref: 'Review',
   localField: '_id',
@@ -159,9 +163,9 @@ tourSchema.pre(/^find/, function (next) {
 });
 //AGGREGATION MIDDLEWARE
 //Tổng hợp tài liệu cũng vậy , né các tour bí mật ra :v
-tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  next();
-});
+// tourSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   next();
+// });
 const Tour = mongoose.model('Tour', tourSchema);
 module.exports = Tour;
