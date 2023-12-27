@@ -79,6 +79,10 @@ body {
   text-align: right !important;
 }
 
+.color {
+  color: red;
+}
+
 .line {
   margin: 6rem 0;
   width: 100%;
