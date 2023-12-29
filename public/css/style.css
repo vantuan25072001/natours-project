@@ -79,6 +79,10 @@ body {
   text-align: right !important;
 }
 
+.color {
+  color: red;
+}
+
 .line {
   margin: 6rem 0;
   width: 100%;
@@ -376,7 +380,7 @@ body {
     to(#28b487)
   );
   background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
-  opacity: 0.85;
+  opacity: 0.3;
 }
 
 .heading-box {
@@ -830,6 +834,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  justify-content: end;
 }
 .footer__nav li {
   margin-left: 1.5rem;
@@ -1116,7 +1121,7 @@ body {
     to(#28b487)
   );
   background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
-  opacity: 0.7;
+  opacity: 0.3;
 }
 .card__picture-img {
   -o-object-fit: cover;

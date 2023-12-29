@@ -99,7 +99,7 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
       new AppError('Please provide a lat and lng in the format lat , lng', 400),
     );
   }
-  console.log(distance, lat, lng, unit);
+  // console.log(distance, lat, lng, unit);
   const tours = await Tour.find({
     startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
   });
@@ -122,7 +122,7 @@ exports.getDistances = catchAsync(async (req, res, next) => {
       new AppError('Please provide a lat and lng in the format lat , lng', 400),
     );
   }
-  console.log(lat, lng, unit);
+  // console.log(lat, lng, unit);
 
   const distances = await Tour.aggregate([
     {
