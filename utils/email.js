@@ -13,7 +13,7 @@ const sendEmail = async (options) => {
   });
   //2. Xác định các tùy chọn email
   const mailOptions = {
-    from: 'Nguyễn Văn Tuấn <vantuan@gmail.com>',
+    from: process.env.EMAIL_FROM,
     to: options.email,
     subject: options.subject,
     text: options.message,
