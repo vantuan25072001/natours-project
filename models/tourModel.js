@@ -148,17 +148,17 @@ tourSchema.pre('save', async function (next) {
 });
 
 // QUERY MIDDLWARE
-//display children
-tourSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'guides',
-    select: '-__v -passwordChangeAt',
-  });
-  next();
-});
+
 //tất cả các truy vấn tìm thì đều né Tour bí mật
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
+  next();
+});
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
   next();
 });
 //AGGREGATION MIDDLEWARE

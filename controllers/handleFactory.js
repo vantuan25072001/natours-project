@@ -44,22 +44,6 @@ exports.createOne = (Model) =>
     });
   });
 
-exports.getOne = (Model, popOptions) =>
-  catchAsync(async (req, res, next) => {
-    let query = Model.findByIdAndUpdate(req.params.id);
-    if (popOptions) query = query.populate(popOptions);
-    const doc = await query;
-    if (!doc) {
-      return next(new AppError('No document found with that ID', 404));
-    }
-    res.status(200).json({
-      status: 'success',
-      data: {
-        doc,
-      },
-    });
-  });
-
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     //To allow for nested GET reviews on tour (HACK)
@@ -79,6 +63,21 @@ exports.getAll = (Model) =>
       results: tours.length,
       data: {
         tours,
+      },
+    });
+  });
+exports.getOne = (Model, popOptions) =>
+  catchAsync(async (req, res, next) => {
+    let query = Model.findByIdAndUpdate(req.params.id);
+    if (popOptions) query = query.populate(popOptions);
+    const doc = await query;
+    if (!doc) {
+      return next(new AppError('No document found with that ID', 404));
+    }
+    res.status(200).json({
+      status: 'success',
+      data: {
+        doc,
       },
     });
   });

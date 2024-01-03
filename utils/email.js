@@ -4,16 +4,16 @@ const nodemailer = require('nodemailer');
 const sendEmail = async (options) => {
   //1. Tạo 1 phương tiện vận chuyển
   const transport = nodemailer.createTransport({
-    host: 'sandbox.smtp.mailtrap.io',
-    port: 2525,
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
     auth: {
-      user: 'd8aaedf5ad2f51',
-      pass: '8c9f1371637231',
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
     },
   });
   //2. Xác định các tùy chọn email
   const mailOptions = {
-    from: 'Nguyễn Văn Tuấn <vantuan@gmail.com>',
+    from: process.env.EMAIL_FROM,
     to: options.email,
     subject: options.subject,
     text: options.message,
