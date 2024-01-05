@@ -108,8 +108,56 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   //GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have permission to perform this action!', 403),
+      );
+    }
+    next();
+  };
+};
+exports.isLoggedIn = async (req, res, next) => {
+  try {
+    if (req.cookies.jwt) {
+      //1. Get token và kiểm tra nó.
+      //2. Verification token (giải mã token tạo ra từ id và khóa )
+      // (thành công => trả về khóa và thực hiện tiếp routes)
+      // (thất bại =>  trả về lỗi và không thực hiện tiếp routes)
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET,
+      );
+
+      //3. Kiểm tra nếu user still exists
+      // Khi đang xác thực token người dùng bị xóa ,nghĩa là không đăng nhập(không có tài khoản) => nên vẫn có thể vào được tuyến đường.
+      // Hoặc là khi mà người dùng đổi mật khẩu trong khi mã token đã được xác nhận , thì người dùng vẫn đến tuyến dường đó được.
+      //Ví dụ : khi ai đó đánh cắp mã token của mình mà người dùng đổi mật khẩu người dùng.Nhưng mã token vẫn xác nhận được để vào tuyến đường.
+      //Token phải đi kèm với id , id tồn tại thì token đúng (và ngược lại).
+      //Khi tài khoản bay màu mà vẫn còn token thì nó vẫn qua bước xác minh đó và đến tuyến routes tiếp theo.
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+      //4. Check if người dùng đổi mật after the token was issues
+      // Kiểm tra xem password có đổi sau thời gian tạo token không , nếu token tạo trước thì trả về đúng , có đổi
+      if (currentUser.changePasswordAfter(decoded.iat)) {
+        return next();
+      }
+      // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser;
+      return next();
+    }
+  } catch (err) {
+    return next();
+  }
+  next();
+};
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
